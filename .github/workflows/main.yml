@@ -5,16 +5,12 @@ on: push
  
 
 jobs:
-  deploy-to-github-pages:
-    # use ubuntu-latest image to run steps on
+  build:
     runs-on: ubuntu-latest
     steps:
-    # uses GitHub's checkout action to checkout code form the master branch
     - uses: actions/checkout@v2
-    
-    # sets up .NET Core SDK 3.1
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.402
 
@@ -24,7 +20,7 @@ jobs:
           
     # publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
-      
+      run: dotnet publish --configuration Release --output build
     
     # changes the base-tag in index.html from '/' to 'Bzor_simple' to match GitHub Pages repository subdirectory
     - name: Change base-tag in index.html from / to Bzor_simple
@@ -39,3 +35,11 @@ jobs:
       run: touch release/wwwroot/.nojekyll
       
 
+    - name: Deploy to Github Pages
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: development # The branch the action should deploy from.
+        BRANCH: master # The branch the action should deploy to.
+        FOLDER: build/wwwroot # The folder the action should deploy.
+        SINGLE_COMMIT: true
