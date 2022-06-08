@@ -27,5 +27,5 @@ jobs:
   
      # changes the base-tag in index.html from '/' to 'Bzor_simple' to match GitHub Pages repository subdirectory
     - name: Change base-tag in index.html from / to Bzor_simple
-      run: sed -i 's/<base href="\/" \/>/<base href="\/Bzor_simple\/" \/>/g' release/wwwroot/index.html
+      run: sed -i 's/<base href="\/" \/>/<base href="\/Bzor_simple\/" \/>/g' index.html
     
